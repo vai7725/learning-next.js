@@ -1,22 +1,60 @@
 'use client'
 import Link from 'next/link'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import axios from 'axios'
+import toast from 'react-hot-toast'
 
 export default function signup() {
+  const router = useRouter()
+
   const [user, setUser] = useState({
     email: '',
     password: '',
     username: '',
   })
 
-  const onSignUp = async () => {}
+  const [buttonDisabled, setButotnDisabled] = useState(false)
+  const [loading, setLoading] = useState(false)
+
+  const onSignUp = async (e: any) => {
+    e.preventDefault()
+    try {
+      setLoading(true)
+      const res = await axios.post('/api/users/signup', user)
+      if (res.data.success) {
+        toast.success(res?.data?.message)
+        router.push('/login')
+      }
+    } catch (error: any) {
+      console.log(error)
+      toast.error(error.message)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    if (
+      user.username.length > 0 &&
+      user.password.length > 0 &&
+      user.email.length > 0
+    ) {
+      setButotnDisabled(false)
+    } else {
+      setButotnDisabled(true)
+    }
+  }, [user])
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen py-2 bg-gray-100">
-      <h1 className="text-3xl font-semibold text-indigo-700">Sign up</h1>
-      <form className="flex flex-col px-4 py-8 rounded-md my-2 bg-white shadow-md">
+      <h1 className="text-3xl font-semibold text-indigo-700">
+        {loading ? 'Processing' : 'Sign up'}
+      </h1>
+      <form
+        className="flex flex-col px-4 py-8 rounded-md my-2 bg-white shadow-md"
+        onSubmit={onSignUp}
+      >
         <div className="flex flex-col">
           <label htmlFor="username" className="text-sm text-gray-600">
             Username
@@ -58,7 +96,11 @@ export default function signup() {
         </div>
         <button
           type="submit"
-          className="bg-indigo-700 text-white py-1 rounded-md my-2 text-sm font-semibold"
+          className={`${
+            buttonDisabled
+              ? 'bg-indigo-300 cursor-not-allowed'
+              : 'bg-indigo-700 cursor-pointer'
+          } text-white py-1 rounded-md my-2 text-sm font-semibold`}
         >
           Create account
         </button>
