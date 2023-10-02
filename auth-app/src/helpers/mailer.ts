@@ -1,6 +1,7 @@
 import nodemailer from 'nodemailer'
 import User from '@/models/userModel'
 import bcryptjs from 'bcryptjs'
+import { NextResponse } from 'next/server'
 
 export const sendEmail = async ({ email, emailType, userId }: any) => {
   try {
@@ -33,9 +34,9 @@ export const sendEmail = async ({ email, emailType, userId }: any) => {
       subject:
         emailType === 'VERIFY' ? 'Verify your email' : 'Reset your password',
       html: `
-            <p> Click <a href="${
-              process.env.DOMAIN
-            }/verifyemail?token=${hashedToken}">here</a> to ${
+            <p> Click <a href="${process.env.DOMAIN}/${
+        emailType === 'VERIFY' ? 'verifyemail' : 'reset-password'
+      }?token=${hashedToken}">here</a> to ${
         emailType === 'VERIFY' ? 'Verify your email' : 'Reset your password'
       } </p>
         `,

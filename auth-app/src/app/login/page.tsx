@@ -63,9 +63,17 @@ export default function LoginPage() {
           />
         </div>
         <div className="flex flex-col">
-          <label htmlFor="password" className="text-sm text-gray-600">
-            Password
-          </label>
+          <div className="flex justify-between items-center">
+            <label htmlFor="password" className="text-sm text-gray-600">
+              Password
+            </label>
+            <Link
+              href={'/resetpassword'}
+              className="text-sm text-indigo-700 font-semibold "
+            >
+              Forgot password?
+            </Link>
+          </div>
           <input
             name="password"
             type="password"

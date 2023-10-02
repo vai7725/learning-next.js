@@ -8,7 +8,6 @@ export async function POST(req: NextRequest) {
   try {
     const reqBody = await req.json()
     const { token } = reqBody
-    console.log(token)
 
     const user = await User.findOne({
       verifyToken: token,
@@ -22,7 +21,6 @@ export async function POST(req: NextRequest) {
     user.verifyToken = undefined
     user.verifyTokenExpiry = undefined
     await user.save()
-    console.log(user)
     return NextResponse.json(
       { message: 'Email verified successfully', success: true },
       { status: 200 }
