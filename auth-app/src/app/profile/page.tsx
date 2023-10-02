@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react'
 
 export default function UserProfile({ params }: any) {
   const router = useRouter()
-  const [user, setUser] = useState({})
+  const [user, setUser]: any = useState({})
   const logOut = async () => {
     try {
       const res = await axios.get('/api/users/logout')

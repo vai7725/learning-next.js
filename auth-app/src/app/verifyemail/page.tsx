@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 
-export default function page() {
+export default function VerifyEmail() {
   const router = useRouter()
   const [token, setToken] = useState('')
   const [verified, setVerified] = useState(false)
