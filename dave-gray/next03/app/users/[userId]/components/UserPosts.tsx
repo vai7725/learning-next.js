@@ -4,7 +4,6 @@ type Props = {
 
 export default async function UserPosts({ promise }: Props) {
   const posts = await promise
-  console.log('posts = ', posts)
   return (
     <>
       {posts.map((post) => {

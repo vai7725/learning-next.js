@@ -3,6 +3,8 @@ import { Suspense } from 'react'
 import UserPosts from './components/UserPosts'
 import getUserPosts from '@/lib/getUserPosts'
 import { Metadata } from 'next'
+import getAllUsers from '@/lib/getAllUsers'
+import { notFound } from 'next/navigation'
 
 type Params = {
   params: {
@@ -16,8 +18,8 @@ export async function generateMetadata({
   const userData: Promise<User> = getUser(userId)
   const user: User = await userData
   return {
-    title: user.name,
-    description: `This is the page of ${user.name}`,
+    title: user?.name,
+    description: `This is the page of ${user?.name}`,
   }
 }
 
@@ -29,6 +31,8 @@ export default async function UserPage({ params: { userId } }: Params) {
 
   const user = await userData
 
+  if (!user) return notFound()
+
   return (
     <>
       <h1>{user.name}</h1>
@@ -38,4 +42,13 @@ export default async function UserPage({ params: { userId } }: Params) {
       </Suspense>
     </>
   )
+}
+
+// working for SSG pages
+export async function generateStaticParams() {
+  const usersData: Promise<User[]> = getAllUsers()
+  const users = await usersData
+  return users.map((user) => ({
+    userId: user.id.toString(),
+  }))
 }
